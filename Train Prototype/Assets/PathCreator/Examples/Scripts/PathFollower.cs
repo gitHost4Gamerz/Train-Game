@@ -8,15 +8,17 @@ namespace PathCreation.Examples
     {
         public PathCreator pathCreator;
         public EndOfPathInstruction endOfPathInstruction;
-        public float speed = 5;
-        public float minSpeed = -5;
-        public float maxSpeed = 5;
+        public float speed = 5f;
+        public float fueledSpeed = 5f;
+        public float minSpeed = -5f;
+        public float maxSpeed = 10f;
         public float speedChange = 5f;
         public int car = 1;
         public bool fueled = true;
         float distanceTravelled;
 
-        void Start() {
+        void Start()
+        {
             if (pathCreator != null)
             {
                 // Subscribed to the pathUpdated event so that we're notified if the path changes during the game
@@ -26,27 +28,27 @@ namespace PathCreation.Examples
 
         void Update()
         {
-            //check to see if train is fueled (propelling itself)
+            // Check to see if train is fueled (propelling itself)
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 fueled = !fueled;
             }
 
-            //consistent frames
+            // Consistent frames
             float amount = Mathf.Abs(speedChange * Time.deltaTime);
 
-            //if we are self-propelling, accelerate until we hit max speed and then cap
-            if (fueled && speed < maxSpeed)
+            // If we are self-propelling, accelerate until we hit max speed and then cap
+            if (fueled && speed < fueledSpeed)
             {
                 speed += amount;
-                if (speed > maxSpeed)
+                if (speed > fueledSpeed)
                 {
-                    speed = maxSpeed;
+                    speed = fueledSpeed;
                 }
             }
 
-            //if we are not self-propelling, decelerate until we hit zero and then set to 0
-            if (!fueled && speed > 0)
+            // If we are not self-propelling, decelerate until we hit zero and then set to 0 (only if on a flat plane)
+            if (!fueled && speed > 0 && FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0) 
             {
                 speed -= amount;
                 if (speed < 0.01)
@@ -56,33 +58,46 @@ namespace PathCreation.Examples
             }
 
             // Add rotational acceleration
-            if (speed >= minSpeed && speed <= maxSpeed + 5)
+            if (speed >= minSpeed && speed <= maxSpeed)
             {
                 speed += FindObjectOfType<RotationCalculator>().rotationalAcceleration;
             }
-            
-            // If we are going faster than the maxSpeed
-            if (speed >= maxSpeed)
+
+            // If we are going faster than the fueledSpeed
+            if (speed >= fueledSpeed)
             {
-                // If we are going faster than the allowed acceleration limit
-                if (speed >= maxSpeed + 5)
-                {
-                    speed = maxSpeed + 5;
-                }
-                // If we are level, set back to maxSpeed
-                if (FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0)
+                // If we are going faster than the maxSpeed, set to maxSpeed
+                if (speed >= maxSpeed)
                 {
                     speed = maxSpeed;
                 }
+                // If we are level, set back to fueledSpeed after a second
+                if (FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0)
+                {
+                    speed -= amount;
+                    if (speed < fueledSpeed)
+                    {
+                        speed = fueledSpeed;
+                    }
+                }
             }
+
+            // If we are going slower than the minSpeed set back to minSpeed
             if (speed <= minSpeed)
             {
                 speed = minSpeed;
-                if (FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0)
+            }
+
+            // Special case for sliding backwards when not self-propelled that makes us slow down
+            if (!fueled && speed <= 0 && FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0)
+            {
+                speed += amount;
+                if (speed > -0.01)
                 {
                     speed = 0;
                 }
             }
+
 
             //follow path
             if (pathCreator != null)
@@ -101,7 +116,8 @@ namespace PathCreation.Examples
 
         // If the path changes during the game, update the distance travelled so that the follower's position on the new path
         // is as close as possible to its position on the old path
-        void OnPathChanged() {
+        void OnPathChanged()
+        {
             distanceTravelled = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
         }
     }
