@@ -61,6 +61,12 @@ namespace PathCreation.Examples
                 transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled - car, endOfPathInstruction);
                 transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled - car, endOfPathInstruction);
             }
+
+            // Setting each train in the whole train array
+            if (FindObjectOfType<RotationCalculator>() != null)
+            {
+                FindObjectOfType<RotationCalculator>().trains[car - 1] = this;
+            }
         }
 
         // If the path changes during the game, update the distance travelled so that the follower's position on the new path
