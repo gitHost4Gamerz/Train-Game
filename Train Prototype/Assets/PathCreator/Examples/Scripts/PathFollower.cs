@@ -9,6 +9,7 @@ namespace PathCreation.Examples
         public PathCreator pathCreator;
         public EndOfPathInstruction endOfPathInstruction;
         public float speed = 5;
+        public float minSpeed = -5;
         public float maxSpeed = 5;
         public float speedChange = 5f;
         public int car = 1;
@@ -54,7 +55,30 @@ namespace PathCreation.Examples
                 }
             }
 
-            //follow screen
+            // Add rotational acceleration
+            if (speed >= minSpeed && speed <= maxSpeed + 5)
+            {
+                speed += FindObjectOfType<RotationCalculator>().rotationalAcceleration;
+            }
+            
+            if (speed > maxSpeed + 5)
+            {
+                speed = maxSpeed + 5;
+                if (FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0)
+                {
+                    speed = maxSpeed;
+                }
+            }
+            if (speed < minSpeed)
+            {
+                speed = minSpeed;
+                if (FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0)
+                {
+                    speed = 0;
+                }
+            }
+
+            //follow path
             if (pathCreator != null)
             {
                 distanceTravelled += (speed * Time.deltaTime);

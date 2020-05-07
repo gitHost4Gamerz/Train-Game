@@ -706,6 +706,7 @@ MonoBehaviour:
   hillChange: 1
   bigHillChange: 3
   cRot: 0
+  train: {fileID: 1062113835}
 --- !u!4 &1445878239
 Transform:
   m_ObjectHideFlags: 0
