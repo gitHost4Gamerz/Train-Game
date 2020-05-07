@@ -61,15 +61,21 @@ namespace PathCreation.Examples
                 speed += FindObjectOfType<RotationCalculator>().rotationalAcceleration;
             }
             
-            if (speed > maxSpeed + 5)
+            // If we are going faster than the maxSpeed
+            if (speed >= maxSpeed)
             {
-                speed = maxSpeed + 5;
+                // If we are going faster than the allowed acceleration limit
+                if (speed >= maxSpeed + 5)
+                {
+                    speed = maxSpeed + 5;
+                }
+                // If we are level, set back to maxSpeed
                 if (FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0)
                 {
                     speed = maxSpeed;
                 }
             }
-            if (speed < minSpeed)
+            if (speed <= minSpeed)
             {
                 speed = minSpeed;
                 if (FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0)
