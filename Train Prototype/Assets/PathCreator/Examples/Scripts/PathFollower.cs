@@ -9,7 +9,8 @@ namespace PathCreation.Examples
         public PathCreator pathCreator;
         public EndOfPathInstruction endOfPathInstruction;
         public float speed = 5;
-        public float speedChange = 0.01f;
+        public float maxSpeed = 5;
+        public float speedChange = 5f;
         public int car = 1;
         public bool fueled = true;
         float distanceTravelled;
@@ -24,19 +25,36 @@ namespace PathCreation.Examples
 
         void Update()
         {
+            //check to see if train is fueled (propelling itself)
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 fueled = !fueled;
             }
-            if (fueled && speed < 5)
+
+            //consistent frames
+            float amount = Mathf.Abs(speedChange * Time.deltaTime);
+
+            //if we are self-propelling, accelerate until we hit max speed and then cap
+            if (fueled && speed < maxSpeed)
             {
-                speed = speed + speedChange;
+                speed += amount;
+                if (speed > maxSpeed)
+                {
+                    speed = maxSpeed;
+                }
             }
+
+            //if we are not self-propelling, decelerate until we hit zero and then set to 0
             if (!fueled && speed > 0)
             {
-                speed = speed - speedChange;
-
+                speed -= amount;
+                if (speed < 0.01)
+                {
+                    speed = 0;
+                }
             }
+
+            //follow screen
             if (pathCreator != null)
             {
                 distanceTravelled += (speed * Time.deltaTime);
