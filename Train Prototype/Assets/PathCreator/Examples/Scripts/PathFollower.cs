@@ -9,7 +9,9 @@ namespace PathCreation.Examples
         public PathCreator pathCreator;
         public EndOfPathInstruction endOfPathInstruction;
         public float speed = 5;
+        public float speedChange = 0.01f;
         public int car = 1;
+        public bool fueled = true;
         float distanceTravelled;
 
         void Start() {
@@ -22,6 +24,19 @@ namespace PathCreation.Examples
 
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                fueled = !fueled;
+            }
+            if (fueled && speed < 5)
+            {
+                speed = speed + speedChange;
+            }
+            if (!fueled && speed > 0)
+            {
+                speed = speed - speedChange;
+
+            }
             if (pathCreator != null)
             {
                 distanceTravelled += (speed * Time.deltaTime);
