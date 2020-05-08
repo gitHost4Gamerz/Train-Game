@@ -32,6 +32,14 @@ namespace PathCreation.Examples
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 fueled = !fueled;
+                if (!fueled)
+                {
+                    fueledSpeed = 0;
+                }
+                else
+                {
+                    fueledSpeed = 5f;
+                }
             }
 
             // Consistent frames
@@ -48,12 +56,24 @@ namespace PathCreation.Examples
             }
 
             // If we are not self-propelling, decelerate until we hit zero and then set to 0 (only if on a flat plane)
-            if (!fueled && speed > 0 && FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0) 
+            if (!fueled && FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0) 
             {
-                speed -= amount;
-                if (speed < 0.01)
+                if (speed > 0)
                 {
-                    speed = 0;
+                    speed -= amount;
+                    if (speed < 0.01)
+                    {
+                        speed = 0;
+                    }
+                }
+                // Special case for sliding backwards when not self-propelled that makes us slow down
+                else
+                {
+                    speed += amount;
+                    if (speed > -0.01)
+                    {
+                        speed = 0;
+                    }
                 }
             }
 
@@ -88,17 +108,6 @@ namespace PathCreation.Examples
                 speed = minSpeed;
             }
 
-            // Special case for sliding backwards when not self-propelled that makes us slow down
-            if (!fueled && speed <= 0 && FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0)
-            {
-                speed += amount;
-                if (speed > -0.01)
-                {
-                    speed = 0;
-                }
-            }
-
-
             //follow path
             if (pathCreator != null)
             {
@@ -112,6 +121,26 @@ namespace PathCreation.Examples
             {
                 FindObjectOfType<RotationCalculator>().trains[car - 1] = this;
             }
+
+            // Speed control
+            if (Input.GetKeyDown(KeyCode.DownArrow) && fueledSpeed > 0)
+            {
+                fueledSpeed--;
+                // If this brings us to a halt, we are no longer fueled
+                if (fueledSpeed == 0)
+                {
+                    fueled = false;
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.UpArrow) && fueledSpeed < 5)
+            {
+                fueledSpeed++;
+                // If we are accelerate while stopped, we are now fueled
+                if (!fueled)
+                {
+                    fueled = true;
+                }
+            }   
         }
 
         // If the path changes during the game, update the distance travelled so that the follower's position on the new path
