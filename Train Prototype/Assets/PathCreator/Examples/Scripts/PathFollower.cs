@@ -46,7 +46,7 @@ namespace PathCreation.Examples
             float amount = Mathf.Abs(speedChange * Time.deltaTime);
 
             // If we are self-propelling, accelerate until we hit max speed and then cap
-            if (fueled && speed < fueledSpeed)
+            if (fueled && speed < fueledSpeed && !Input.GetKey(KeyCode.LeftShift))
             {
                 speed += amount;
                 if (speed > fueledSpeed)
@@ -56,7 +56,7 @@ namespace PathCreation.Examples
             }
 
             // If we are not self-propelling, decelerate until we hit zero and then set to 0 (only if on a flat plane)
-            if (!fueled && FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0) 
+            if (!fueled && FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0 && !Input.GetKey(KeyCode.LeftShift)) 
             {
                 if (speed > 0)
                 {
@@ -78,7 +78,7 @@ namespace PathCreation.Examples
             }
 
             // Add rotational acceleration
-            if (speed >= minSpeed && speed <= maxSpeed)
+            if (speed >= minSpeed && speed <= maxSpeed && !Input.GetKey(KeyCode.LeftShift))
             {
                 speed += FindObjectOfType<RotationCalculator>().rotationalAcceleration;
             }
@@ -108,20 +108,6 @@ namespace PathCreation.Examples
                 speed = minSpeed;
             }
 
-            //follow path
-            if (pathCreator != null)
-            {
-                distanceTravelled += (speed * Time.deltaTime);
-                transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled - car, endOfPathInstruction);
-                transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled - car, endOfPathInstruction);
-            }
-
-            // Setting each train in the whole train array
-            if (FindObjectOfType<RotationCalculator>() != null)
-            {
-                FindObjectOfType<RotationCalculator>().trains[car - 1] = this;
-            }
-
             // Speed control
             if (Input.GetKeyDown(KeyCode.DownArrow) && fueledSpeed > 0)
             {
@@ -140,7 +126,36 @@ namespace PathCreation.Examples
                 {
                     fueled = true;
                 }
-            }   
+            }
+
+            // Breaks system
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                if (speed != 0)
+                {
+                    speed = Mathf.Lerp(speed, 0, 0.01f);
+                }
+
+                if (speed <= 0.1 && speed >= -0.1)
+                {
+                    speed = 0;
+                }
+            }
+
+            //follow path
+            if (pathCreator != null)
+            {
+                distanceTravelled += (speed * Time.deltaTime);
+                transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled - car, endOfPathInstruction);
+                transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled - car, endOfPathInstruction);
+            }
+
+            // Setting each train in the whole train array
+            if (FindObjectOfType<RotationCalculator>() != null)
+            {
+                FindObjectOfType<RotationCalculator>().trains[car - 1] = this;
+            }
+
         }
 
         // If the path changes during the game, update the distance travelled so that the follower's position on the new path
