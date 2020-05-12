@@ -108,4 +108,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pathCreator: {fileID: 0}
   endOfPathInstruction: 0
-  speed: 5
+  speed: 0
+  fueledSpeed: 5
+  minSpeed: -5
+  maxSpeed: 7.5
+  speedChange: 5
+  timeConsistent: 0
+  car: 5
+  fueled: 0

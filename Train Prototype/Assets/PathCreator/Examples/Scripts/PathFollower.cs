@@ -11,8 +11,10 @@ namespace PathCreation.Examples
         public float speed = 5f;
         public float fueledSpeed = 5f;
         public float minSpeed = -5f;
-        public float maxSpeed = 10f;
+        public float maxSpeed = 7.5f;
         public float speedChange = 5f;
+        public int timeConsistent = 0;
+
         public int car = 1;
         public bool fueled = true;
         float distanceTravelled;
@@ -28,10 +30,13 @@ namespace PathCreation.Examples
 
         void Update()
         {
+
+
             // Check to see if train is fueled (propelling itself)
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 fueled = !fueled;
+                timeConsistent = 0;
                 if (!fueled)
                 {
                     fueledSpeed = 0;
@@ -42,7 +47,28 @@ namespace PathCreation.Examples
                 }
             }
 
-            // Consistent frames
+            // Calculate how long we've been fueled or unfueled
+            if (fueled || FindObjectOfType<RotationCalculator>().rotationalAcceleration <= 0)
+            {
+                timeConsistent++;
+            }
+
+            //Calculate speedChange (WIP dynamic acceleration, aka the "simulated quadratic")
+            if (timeConsistent >= 0 && timeConsistent < 175) //Small change at first
+            {
+                speedChange = 0.5f;
+            }
+            if (timeConsistent >= 250 && timeConsistent < 450) //Then a medium change after a time
+            {
+                speedChange = 2f;
+            }
+            if (timeConsistent >= 450) //Finally a large change in acceleration, this also caps timeConsistent so no memory leak
+            {
+                timeConsistent = 450;
+                speedChange = 3f;
+            }
+
+            // Consistent frames (this might not be quite right)
             float amount = Mathf.Abs(speedChange * Time.deltaTime);
 
             // If we are self-propelling, accelerate until we hit max speed and then cap
@@ -78,7 +104,7 @@ namespace PathCreation.Examples
             }
 
             // Add rotational acceleration
-            if (speed >= minSpeed && speed <= maxSpeed && !Input.GetKey(KeyCode.LeftShift))
+            if (speed >= minSpeed && speed <= maxSpeed && !Input.GetKey(KeyCode.LeftShift) && (!fueled || speed > (fueledSpeed - 0.5)))
             {
                 speed += FindObjectOfType<RotationCalculator>().rotationalAcceleration;
             }
