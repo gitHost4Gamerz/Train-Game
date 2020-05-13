@@ -20,6 +20,7 @@ namespace PathCreation {
         public readonly Vector3[] localPoints;
         public readonly Vector3[] localTangents;
         public readonly Vector3[] localNormals;
+        public GameObject targetObject;
 
         /// Percentage along the path at each vertex (0 being start of path, and 1 being the end)
         public readonly float[] times;
@@ -265,6 +266,28 @@ namespace PathCreation {
                     break;
                 case EndOfPathInstruction.Stop:
                     t = Mathf.Clamp01 (t);
+                    break;
+                case EndOfPathInstruction.Continue:
+                    /**
+                    // When we reach the end of a path, check all the carts that are on that path.
+                    for (int I = 0; I < targetObject.GetComponent<trackLink>().trainsOnTrack.Length; I++)
+                    {
+                        // Once we find our first cart, we're going to set his pathCreator to "next," so he'll move to the next track.
+                        if (targetObject.GetComponent<trackLink>().trainsOnTrack[I] != null)
+                        {
+                            targetObject.GetComponent<trackLink>().trainsOnTrack[I].GetComponent<PathFollower>().pathCreator = targetObject.GetComponent<trackLink>().next;
+                            //remove that cart from the array
+                            targetObject.GetComponent<trackLink>().trainsOnTrack[I] = null;
+                            break;
+                        }
+                    }
+                    // Here is the code that does what "Loop" does, and *hopefully* sets us to start on our new path (please help me).
+                    **/
+                    if (t < 0)
+                    {
+                        t += Mathf.CeilToInt(Mathf.Abs(t));
+                    }
+                    t %= 1;
                     break;
             }
 

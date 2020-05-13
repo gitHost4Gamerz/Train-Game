@@ -7,6 +7,7 @@ namespace PathCreation.Examples
     public class PathFollower : MonoBehaviour
     {
         public PathCreator pathCreator;
+        public PathCreator currentPath;
         public EndOfPathInstruction endOfPathInstruction;
         public float speed = 5f;
         public float fueledSpeed = 5f;
@@ -21,15 +22,24 @@ namespace PathCreation.Examples
 
         void Start()
         {
+            currentPath = null;
             if (pathCreator != null)
             {
                 // Subscribed to the pathUpdated event so that we're notified if the path changes during the game
                 pathCreator.pathUpdated += OnPathChanged;
             }
+
         }
 
         void Update()
         {
+
+            //Check to see if we have changed paths
+            if (currentPath != pathCreator)
+            {
+                pathCreator.GetComponent<trackLink>().trainsOnTrack[car - 1] = this;
+                currentPath = pathCreator;
+            }
 
 
             // Check to see if train is fueled (propelling itself)

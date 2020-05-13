@@ -63,6 +63,7 @@
      <Compile Include="Assets\PathCreator\Examples\Scripts\PathSpawner.cs" />
      <Compile Include="Assets\PathCreator\Examples\Scripts\RoadMeshCreator.cs" />
      <Compile Include="Assets\RotationCalculator.cs" />
+     <Compile Include="Assets\trackLink.cs" />
  <Reference Include="UnityEngine">
  <HintPath>D:/Prorgrams/2019.3.12f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>

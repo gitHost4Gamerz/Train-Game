@@ -44,7 +44,7 @@ namespace PathCreation {
 
         #region Internal methods
 
-        /// Used by the path editor to initialise some data
+        // Used by the path editor to initialise some data
         public void InitializeEditorData (bool in2DMode) {
             if (editorData == null) {
                 editorData = new PathCreatorData ();
@@ -106,7 +106,6 @@ namespace PathCreation {
             }
         }
 #endif
-
-        #endregion
+#endregion
     }
 }
