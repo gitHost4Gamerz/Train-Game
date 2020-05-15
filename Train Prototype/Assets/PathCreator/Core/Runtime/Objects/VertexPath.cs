@@ -20,7 +20,12 @@ namespace PathCreation {
         public readonly Vector3[] localPoints;
         public readonly Vector3[] localTangents;
         public readonly Vector3[] localNormals;
-        public GameObject targetObject;
+
+        //Charles's fancy new instantiated variable
+        public PathFollower[] trainsOnTrack;
+        public PathCreator previous;
+        public PathCreator next;
+        public bool atEnd = false;
 
         /// Percentage along the path at each vertex (0 being start of path, and 1 being the end)
         public readonly float[] times;
@@ -46,8 +51,13 @@ namespace PathCreation {
         /// <summary> Splits bezier path into array of vertices along the path.</summary>
         ///<param name="maxAngleError">How much can the angle of the path change before a vertex is added. This allows fewer vertices to be generated in straighter sections.</param>
         ///<param name="minVertexDst">Vertices won't be added closer together than this distance, regardless of angle error.</param>
-        public VertexPath (BezierPath bezierPath, Transform transform, float maxAngleError = 0.3f, float minVertexDst = 0):
-            this (bezierPath, VertexPathUtility.SplitBezierPathByAngleError (bezierPath, maxAngleError, minVertexDst, VertexPath.accuracy), transform) { }
+        public VertexPath (PathFollower[] inputArray, PathCreator inputPrevious, PathCreator inputNext, BezierPath bezierPath, Transform transform, float maxAngleError = 0.3f, float minVertexDst = 0):
+            this (bezierPath, VertexPathUtility.SplitBezierPathByAngleError (bezierPath, maxAngleError, minVertexDst, VertexPath.accuracy), transform)
+        {
+            trainsOnTrack = inputArray;
+            previous = inputPrevious;
+            next = inputNext;
+        }
 
         /// <summary> Splits bezier path into array of vertices along the path.</summary>
         ///<param name="maxAngleError">How much can the angle of the path change before a vertex is added. This allows fewer vertices to be generated in straighter sections.</param>
@@ -57,7 +67,8 @@ namespace PathCreation {
             this (bezierPath, VertexPathUtility.SplitBezierPathEvenly (bezierPath, Mathf.Max (vertexSpacing, minVertexSpacing), VertexPath.accuracy), transform) { }
 
         /// Internal contructor
-        VertexPath (BezierPath bezierPath, VertexPathUtility.PathSplitData pathSplitData, Transform transform) {
+        public VertexPath (BezierPath bezierPath, VertexPathUtility.PathSplitData pathSplitData, Transform transform) {
+
             this.transform = transform;
             space = bezierPath.Space;
             isClosedLoop = bezierPath.IsClosed;
@@ -255,7 +266,7 @@ namespace PathCreation {
             // Constrain t based on the end of path instruction
             switch (endOfPathInstruction) {
                 case EndOfPathInstruction.Loop:
-                    // If t is negative, make it the equivalent value between 0 and 1
+                    //If t is negative, make it the equivalent value between 0 and 1
                     if (t < 0) {
                         t += Mathf.CeilToInt (Mathf.Abs (t));
                     }
@@ -268,26 +279,26 @@ namespace PathCreation {
                     t = Mathf.Clamp01 (t);
                     break;
                 case EndOfPathInstruction.Continue:
-                    /**
-                    // When we reach the end of a path, check all the carts that are on that path.
-                    for (int I = 0; I < targetObject.GetComponent<trackLink>().trainsOnTrack.Length; I++)
-                    {
-                        // Once we find our first cart, we're going to set his pathCreator to "next," so he'll move to the next track.
-                        if (targetObject.GetComponent<trackLink>().trainsOnTrack[I] != null)
-                        {
-                            targetObject.GetComponent<trackLink>().trainsOnTrack[I].GetComponent<PathFollower>().pathCreator = targetObject.GetComponent<trackLink>().next;
-                            //remove that cart from the array
-                            targetObject.GetComponent<trackLink>().trainsOnTrack[I] = null;
-                            break;
-                        }
-                    }
+
                     // Here is the code that does what "Loop" does, and *hopefully* sets us to start on our new path (please help me).
-                    **/
                     if (t < 0)
                     {
                         t += Mathf.CeilToInt(Mathf.Abs(t));
                     }
                     t %= 1;
+
+                    //this code tells us that our cart has reached the end of a particular area
+                    if (t >= 0.99)
+                    {
+                       Debug.Log("t is 1, aka you're at the end");
+                        atEnd = true;
+                        t = 0;
+                    } 
+                    else
+                    {
+                        Debug.Log("t is less than one! False!");
+                        atEnd = false;
+                    }
                     break;
             }
 

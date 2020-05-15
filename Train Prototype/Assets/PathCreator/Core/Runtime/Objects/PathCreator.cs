@@ -8,6 +8,9 @@ namespace PathCreation {
         /// Attach to a GameObject to create a new path editor.
 
         public event System.Action pathUpdated;
+        public PathFollower[] trainsOnTrack;
+        public VertexPath myVertPath;
+        public bool atEnd = false;
 
         [SerializeField, HideInInspector]
         PathCreatorData editorData;
@@ -44,16 +47,24 @@ namespace PathCreation {
 
         #region Internal methods
 
+
+
         // Used by the path editor to initialise some data
         public void InitializeEditorData (bool in2DMode) {
             if (editorData == null) {
-                editorData = new PathCreatorData ();
+                editorData = new PathCreatorData (trainsOnTrack, gameObject.GetComponent<trackLink>().previous, gameObject.GetComponent<trackLink>().next);
             }
             editorData.bezierOrVertexPathModified -= TriggerPathUpdate;
             editorData.bezierOrVertexPathModified += TriggerPathUpdate;
 
             editorData.Initialize (in2DMode);
             initialized = true;
+        }
+
+        public void Update()
+        {
+            myVertPath = editorData.GetVertexPath(gameObject.transform);
+            atEnd = myVertPath.atEnd;
         }
 
         public PathCreatorData EditorData {
