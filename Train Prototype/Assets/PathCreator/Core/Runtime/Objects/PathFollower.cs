@@ -16,10 +16,10 @@ namespace PathCreation
         public float speedChange = 5f;
         public int timeConsistent = 0;
 
-        public int car = 1;
+        public int car;
         public bool fueled = true;
         public float distanceTravelled;
-        public float distanceTravelledOnCurrentTrack;
+        public float currentTrackLength;
 
         void Start()
         {
@@ -35,10 +35,19 @@ namespace PathCreation
         void Update()
         {
 
+            // This exists for testing purposes. Not necessary.
+            //Debug.Log(distanceTravelled);
+
+            // This exists for editor testing purposes. Tee-hee!
+            if (pathCreator != null)
+            {
+                currentTrackLength = pathCreator.trackLength;
+            }
+
             //Check to see if we have changed paths
             if (currentPath != pathCreator)
             {
-                pathCreator.GetComponent<trackLink>().trainsOnTrack[car - 1] = this;
+                pathCreator.GetComponent<trackLink>().trainsOnTrack[car] = this;
                 currentPath = pathCreator;
             }
 
@@ -183,19 +192,20 @@ namespace PathCreation
             if (pathCreator != null)
             {
                 distanceTravelled += (speed * Time.deltaTime);
-                distanceTravelledOnCurrentTrack += (speed * Time.deltaTime);
+
+                //this line makes it work for all cars I hope 
+                //distanceTravelled = distanceTravelled - car;
+
                 transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled - car, endOfPathInstruction);
                 transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled - car, endOfPathInstruction);
+
             }
 
             // Setting each train in the whole train array
             if (FindObjectOfType<RotationCalculator>() != null)
             {
-                FindObjectOfType<RotationCalculator>().trains[car - 1] = this;
+                FindObjectOfType<RotationCalculator>().trains[car] = this;
             }
-
-            //Charles's Testing
-            //Debug.Log(distanceTravelled);
 
         }
 
@@ -204,7 +214,7 @@ namespace PathCreation
         void OnPathChanged()
         {
             //distanceTravelled = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
-            distanceTravelledOnCurrentTrack = 0;
+
         }
     }
 }
