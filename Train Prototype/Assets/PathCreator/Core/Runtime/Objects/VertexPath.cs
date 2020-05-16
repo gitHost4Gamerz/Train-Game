@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using PathCreation.Utility;
 using UnityEngine;
+using System;
 
 
 namespace PathCreation {
@@ -25,7 +26,8 @@ namespace PathCreation {
         public PathFollower[] trainsOnTrack;
         public PathCreator previous;
         public PathCreator next;
-        public bool atEnd = false;
+        public bool atEnd;
+        decimal check;
 
         /// Percentage along the path at each vertex (0 being start of path, and 1 being the end)
         public readonly float[] times;
@@ -286,19 +288,6 @@ namespace PathCreation {
                         t += Mathf.CeilToInt(Mathf.Abs(t));
                     }
                     t %= 1;
-
-                    //this code tells us that our cart has reached the end of a particular area
-                    if (t >= 0.99)
-                    {
-                       Debug.Log("t is 1, aka you're at the end");
-                        atEnd = true;
-                        t = 0;
-                    } 
-                    else
-                    {
-                        Debug.Log("t is less than one! False!");
-                        atEnd = false;
-                    }
                     break;
             }
 

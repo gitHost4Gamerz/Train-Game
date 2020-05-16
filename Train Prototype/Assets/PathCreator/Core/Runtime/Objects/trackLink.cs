@@ -15,22 +15,19 @@ namespace PathCreation
         void Update()
         {
 
-            if (gameObject.GetComponent<PathCreator>().atEnd)
+            for (int i = 0; i < trainsOnTrack.Length; i++)
             {
-                Debug.Log("AtEnd");
-
-                for (int I = 0; I < trainsOnTrack.Length; I++)
+                if (trainsOnTrack[i] != null)
                 {
-                    // Once we find our first cart, we're going to set his pathCreator to "next," so he'll move to the next track.
-                    if (trainsOnTrack[I] != null)
+                    if (trainsOnTrack[i].distanceTravelledOnCurrentTrack >= gameObject.GetComponent<PathCreator>().trackLength)
                     {
-                        trainsOnTrack[I].pathCreator = next;
-                        //remove that cart from the array
-                        trainsOnTrack[I] = null;
-                        break;
+                        Debug.Log("Swappin!");
+                        trainsOnTrack[i].pathCreator = next;
+                        trainsOnTrack[i].distanceTravelledOnCurrentTrack = 0;
+                        trainsOnTrack[i].distanceTravelled = 0;
+                        trainsOnTrack[i] = null;
                     }
                 }
-
             }
     
         }

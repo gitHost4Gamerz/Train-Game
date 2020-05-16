@@ -11,6 +11,7 @@ namespace PathCreation {
         public PathFollower[] trainsOnTrack;
         public VertexPath myVertPath;
         public bool atEnd = false;
+        public float trackLength;
 
         [SerializeField, HideInInspector]
         PathCreatorData editorData;
@@ -63,8 +64,9 @@ namespace PathCreation {
 
         public void Update()
         {
-            myVertPath = editorData.GetVertexPath(gameObject.transform);
+            myVertPath = editorData.GetVertexPathNow(gameObject.transform);
             atEnd = myVertPath.atEnd;
+            trackLength = myVertPath.length;
         }
 
         public PathCreatorData EditorData {

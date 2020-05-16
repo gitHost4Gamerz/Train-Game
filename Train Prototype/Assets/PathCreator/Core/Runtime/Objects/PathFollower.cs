@@ -18,7 +18,8 @@ namespace PathCreation
 
         public int car = 1;
         public bool fueled = true;
-        float distanceTravelled;
+        public float distanceTravelled;
+        public float distanceTravelledOnCurrentTrack;
 
         void Start()
         {
@@ -182,6 +183,7 @@ namespace PathCreation
             if (pathCreator != null)
             {
                 distanceTravelled += (speed * Time.deltaTime);
+                distanceTravelledOnCurrentTrack += (speed * Time.deltaTime);
                 transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled - car, endOfPathInstruction);
                 transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled - car, endOfPathInstruction);
             }
@@ -192,13 +194,17 @@ namespace PathCreation
                 FindObjectOfType<RotationCalculator>().trains[car - 1] = this;
             }
 
+            //Charles's Testing
+            //Debug.Log(distanceTravelled);
+
         }
 
         // If the path changes during the game, update the distance travelled so that the follower's position on the new path
         // is as close as possible to its position on the old path
         void OnPathChanged()
         {
-            distanceTravelled = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
+            //distanceTravelled = pathCreator.path.GetClosestDistanceAlongPath(transform.position);
+            distanceTravelledOnCurrentTrack = 0;
         }
     }
 }

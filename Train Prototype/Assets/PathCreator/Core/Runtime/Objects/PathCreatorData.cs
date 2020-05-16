@@ -109,6 +109,21 @@ namespace PathCreation {
         }
 
 
+        // Another cursed method by Charles. I'm sorry mom.
+        public VertexPath GetVertexPathNow(Transform transform)
+        {
+            _vertexPath = new VertexPath(trainsOnTrack, previous, next, bezierPath, transform, vertexPathMaxAngleError, vertexPathMinVertexSpacing);
+            
+
+            if (_vertexPath.atEnd)
+            {
+                Debug.Log("atEnd in PathCreatorData");
+            }
+
+            return _vertexPath;
+        }
+
+
         // Get the current vertex path
         public VertexPath GetVertexPath (Transform transform) {
             // create new vertex path if path was modified since this vertex path was created
