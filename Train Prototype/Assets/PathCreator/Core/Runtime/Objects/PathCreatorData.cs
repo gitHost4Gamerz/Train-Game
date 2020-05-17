@@ -43,19 +43,6 @@ namespace PathCreation {
         public bool showNormalsHelpInfo;
         public int tabIndex;
 
-        //Store our path follower array here [COME BACK DOC BETTER]
-        public PathFollower[] trainsOnTrack;
-        public PathCreator previous;
-        public PathCreator next;
-
-        // Charles's fancy new constructor
-        public PathCreatorData (PathFollower[] inputArray, PathCreator inputPrevious, PathCreator inputNext)
-        {
-            trainsOnTrack = inputArray;
-            previous = inputPrevious;
-            next = inputNext;
-        }
-
         public void Initialize (bool defaultIs2D) {
             if (_bezierPath == null) {
                 CreateBezier (Vector3.zero, defaultIs2D);
@@ -112,13 +99,7 @@ namespace PathCreation {
         // Another cursed method by Charles. I'm sorry mom.
         public VertexPath GetVertexPathNow(Transform transform)
         {
-            _vertexPath = new VertexPath(trainsOnTrack, previous, next, bezierPath, transform, vertexPathMaxAngleError, vertexPathMinVertexSpacing);
-            
-
-            if (_vertexPath.atEnd)
-            {
-                Debug.Log("atEnd in PathCreatorData");
-            }
+            _vertexPath = new VertexPath(bezierPath, transform, vertexPathMaxAngleError, vertexPathMinVertexSpacing);
 
             return _vertexPath;
         }
@@ -129,7 +110,7 @@ namespace PathCreation {
             // create new vertex path if path was modified since this vertex path was created
             if (!vertexPathUpToDate || _vertexPath == null) {
                 vertexPathUpToDate = true;
-                _vertexPath = new VertexPath (trainsOnTrack, previous, next, bezierPath, transform, vertexPathMaxAngleError, vertexPathMinVertexSpacing);
+                _vertexPath = new VertexPath (bezierPath, transform, vertexPathMaxAngleError, vertexPathMinVertexSpacing);
             }
             return _vertexPath;
         }

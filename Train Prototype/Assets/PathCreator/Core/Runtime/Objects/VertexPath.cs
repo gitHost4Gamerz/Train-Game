@@ -22,12 +22,6 @@ namespace PathCreation {
         public readonly Vector3[] localTangents;
         public readonly Vector3[] localNormals;
 
-        //Charles's fancy new instantiated variable
-        public PathFollower[] trainsOnTrack;
-        public PathCreator previous;
-        public PathCreator next;
-        public bool atEnd;
-        decimal check;
 
         /// Percentage along the path at each vertex (0 being start of path, and 1 being the end)
         public readonly float[] times;
@@ -53,12 +47,9 @@ namespace PathCreation {
         /// <summary> Splits bezier path into array of vertices along the path.</summary>
         ///<param name="maxAngleError">How much can the angle of the path change before a vertex is added. This allows fewer vertices to be generated in straighter sections.</param>
         ///<param name="minVertexDst">Vertices won't be added closer together than this distance, regardless of angle error.</param>
-        public VertexPath (PathFollower[] inputArray, PathCreator inputPrevious, PathCreator inputNext, BezierPath bezierPath, Transform transform, float maxAngleError = 0.3f, float minVertexDst = 0):
+        public VertexPath (BezierPath bezierPath, Transform transform, float maxAngleError = 0.3f, float minVertexDst = 0):
             this (bezierPath, VertexPathUtility.SplitBezierPathByAngleError (bezierPath, maxAngleError, minVertexDst, VertexPath.accuracy), transform)
         {
-            trainsOnTrack = inputArray;
-            previous = inputPrevious;
-            next = inputNext;
         }
 
         /// <summary> Splits bezier path into array of vertices along the path.</summary>

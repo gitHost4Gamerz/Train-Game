@@ -15,6 +15,8 @@ namespace PathCreation
         public float maxSpeed = 7.5f;
         public float speedChange = 5f;
         public int timeConsistent = 0;
+        public float offsetPosition;
+        public RotationCalculator wholeTrain;
 
         public int car;
         public bool fueled = true;
@@ -102,8 +104,8 @@ namespace PathCreation
             }
 
             // If we are not self-propelling, decelerate until we hit zero and then set to 0 (only if on a flat plane)
-            if (!fueled && FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0 && !Input.GetKey(KeyCode.LeftShift)) 
-            {
+            if (!fueled && FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0 && !Input.GetKey(KeyCode.LeftShift))
+                {
                 if (speed > 0)
                 {
                     speed -= amount;
@@ -188,16 +190,19 @@ namespace PathCreation
                 }
             }
 
+            // Assign constant variable for path following
+            offsetPosition = (wholeTrain.numOfTrains - (car + 1)) / 1f;
+            //Debug.Log(wholeTrain.numOfTrains);
+
             //follow path
             if (pathCreator != null)
             {
+                // This is the code to apply track offset (I hope)
                 distanceTravelled += (speed * Time.deltaTime);
+                //distanceTravelled += offsetPosition;
 
-                //this line makes it work for all cars I hope 
-                //distanceTravelled = distanceTravelled - car;
-
-                transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled - car, endOfPathInstruction);
-                transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled - car, endOfPathInstruction);
+                transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled + offsetPosition, endOfPathInstruction);
+                transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled + offsetPosition, endOfPathInstruction);
 
             }
 
