@@ -281,13 +281,7 @@ namespace PathCreation {
                     t = Mathf.Clamp01 (t);
                     break;
                 case EndOfPathInstruction.Continue:
-
-                    // Here is the code that does what "Loop" does, and *hopefully* sets us to start on our new path (please help me).
-                    if (t < 0)
-                    {
-                        t += Mathf.CeilToInt(Mathf.Abs(t));
-                    }
-                    t %= 1;
+                    t = Mathf.Clamp01 (t);
                     break;
             }
 
