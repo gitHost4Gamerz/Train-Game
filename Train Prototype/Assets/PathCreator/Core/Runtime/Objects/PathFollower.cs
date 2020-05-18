@@ -47,10 +47,10 @@ namespace PathCreation
                 // So this is how we do it. As soon as numOfTrains is filled, we put the carts where they need to go on the track. This causes a one frame delay, but I have no other ideas. 
                 if (wholeTrain.numOfTrains != 0)
                 {
-                    Debug.Log("Number of trains: " + wholeTrain.numOfTrains);
-                    Debug.Log("Car Number: " + car);
+                    //Debug.Log("Number of trains: " + wholeTrain.numOfTrains);
+                    //Debug.Log("Car Number: " + car);
                     distanceTravelled = wholeTrain.numOfTrains - (car + 1);
-                    Debug.Log("Distance travelled for car " + car + ": " + distanceTravelled);
+                    //Debug.Log("Distance travelled for car " + car + ": " + distanceTravelled);
                     initialized = true;
                 }
             }

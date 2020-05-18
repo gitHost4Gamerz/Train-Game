@@ -1116,6 +1116,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   swapTracks: 0
+  distanceOffset: 0
 --- !u!114 &1222639092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2081,3 +2082,4 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   swapTracks: 0
+  distanceOffset: 0

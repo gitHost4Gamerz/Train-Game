@@ -11,6 +11,7 @@ namespace PathCreation
         public PathCreator next;
         public PathFollower[] trainsOnTrack = new PathFollower[20];
         public bool swapTracks = false;
+        public float distanceOffset = 0;
 
         // Update is called once per frame
         void Update()
@@ -25,8 +26,9 @@ namespace PathCreation
                     if (trainsOnTrack[i].distanceTravelled >= gameObject.GetComponent<PathCreator>().trackLength)
                     {
                         Debug.Log("Swappin!");
+                        distanceOffset = trainsOnTrack[i].distanceTravelled - trainsOnTrack[i].pathCreator.trackLength;
                         trainsOnTrack[i].pathCreator = next;
-                        trainsOnTrack[i].distanceTravelled = 0;
+                        trainsOnTrack[i].distanceTravelled = distanceOffset;
                         trainsOnTrack[i] = null;
                         swapTracks = false;
                         break;  

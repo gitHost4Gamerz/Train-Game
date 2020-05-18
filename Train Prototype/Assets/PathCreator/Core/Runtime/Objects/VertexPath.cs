@@ -272,7 +272,7 @@ namespace PathCreation {
                     t = Mathf.Clamp01 (t);
                     break;
                 case EndOfPathInstruction.Continue:
-                    t = Mathf.Clamp01 (t);
+                    t = Mathf.Clamp01(t);
                     break;
             }
 
