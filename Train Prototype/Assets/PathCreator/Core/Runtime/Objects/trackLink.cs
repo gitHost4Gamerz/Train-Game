@@ -23,7 +23,7 @@ namespace PathCreation
                 if (trainsOnTrack[i] != null && gameObject.GetComponent<PathCreator>().trackLength != 0)
                 {
                     // If this cart has travelled the distance of our track length, swap to the next track, set distance travelled to 0, and remove it from this fine array.
-                    if (trainsOnTrack[i].distanceTravelled >= gameObject.GetComponent<PathCreator>().trackLength)
+                    if (trainsOnTrack[i].distanceTravelled + 0.1f >= gameObject.GetComponent<PathCreator>().trackLength)
                     {
                         Debug.Log("Swappin!");
                         distanceOffset = trainsOnTrack[i].distanceTravelled - trainsOnTrack[i].pathCreator.trackLength;
