@@ -15,17 +15,20 @@ namespace PathCreation
         public float maxSpeed = 7.5f;
         public float speedChange = 5f;
         public int timeConsistent = 0;
-        public float offsetPosition;
         public RotationCalculator wholeTrain;
-
         public int car;
+        public bool initialized = false;
+
+        public float distanceTravelled = 0;
+
         public bool fueled = true;
-        public float distanceTravelled;
         public float currentTrackLength;
 
         void Start()
         {
-            currentPath = null;
+            // Set ourselves in our wholeTrain's trains array at the start - asap
+            wholeTrain.trains[car] = this;
+
             if (pathCreator != null)
             {
                 // Subscribed to the pathUpdated event so that we're notified if the path changes during the game
@@ -36,6 +39,21 @@ namespace PathCreation
 
         void Update()
         {
+
+            // Initial Update - sets our trains in their appropriate positions as soon as possible.
+            if (!initialized)
+            {
+                // Tragically, I haven't come up with a way for numOfTrains to be filled before this script ever runs.
+                // So this is how we do it. As soon as numOfTrains is filled, we put the carts where they need to go on the track. This causes a one frame delay, but I have no other ideas. 
+                if (wholeTrain.numOfTrains != 0)
+                {
+                    Debug.Log("Number of trains: " + wholeTrain.numOfTrains);
+                    Debug.Log("Car Number: " + car);
+                    distanceTravelled = wholeTrain.numOfTrains - (car + 1);
+                    Debug.Log("Distance travelled for car " + car + ": " + distanceTravelled);
+                    initialized = true;
+                }
+            }
 
             // This exists for testing purposes. Not necessary.
             //Debug.Log(distanceTravelled);
@@ -70,7 +88,7 @@ namespace PathCreation
             }
 
             // Calculate how long we've been fueled or unfueled
-            if (fueled || FindObjectOfType<RotationCalculator>().rotationalAcceleration <= 0)
+            if (fueled || wholeTrain.rotationalAcceleration <= 0)
             {
                 timeConsistent++;
             }
@@ -104,7 +122,7 @@ namespace PathCreation
             }
 
             // If we are not self-propelling, decelerate until we hit zero and then set to 0 (only if on a flat plane)
-            if (!fueled && FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0 && !Input.GetKey(KeyCode.LeftShift))
+            if (!fueled && wholeTrain.rotationalAcceleration == 0 && !Input.GetKey(KeyCode.LeftShift))
                 {
                 if (speed > 0)
                 {
@@ -128,7 +146,7 @@ namespace PathCreation
             // Add rotational acceleration
             if (speed >= minSpeed && speed <= maxSpeed && !Input.GetKey(KeyCode.LeftShift) && (!fueled || speed > (fueledSpeed - 0.5)))
             {
-                speed += FindObjectOfType<RotationCalculator>().rotationalAcceleration;
+                speed += wholeTrain.rotationalAcceleration;
             }
 
             // If we are going faster than the fueledSpeed
@@ -140,7 +158,7 @@ namespace PathCreation
                     speed = maxSpeed;
                 }
                 // If we are level, set back to fueledSpeed after a second
-                if (FindObjectOfType<RotationCalculator>().rotationalAcceleration == 0)
+                if (wholeTrain.rotationalAcceleration == 0)
                 {
                     speed -= amount;
                     if (speed < fueledSpeed)
@@ -190,26 +208,14 @@ namespace PathCreation
                 }
             }
 
-            // Assign constant variable for path following
-            offsetPosition = (wholeTrain.numOfTrains - (car + 1)) / 1f;
-            //Debug.Log(wholeTrain.numOfTrains);
-
             //follow path
-            if (pathCreator != null)
+            if (pathCreator != null && initialized)
             {
-                // This is the code to apply track offset (I hope)
                 distanceTravelled += (speed * Time.deltaTime);
-                //distanceTravelled += offsetPosition;
 
-                transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled + offsetPosition, endOfPathInstruction);
-                transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled + offsetPosition, endOfPathInstruction);
+                transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
+                transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
 
-            }
-
-            // Setting each train in the whole train array
-            if (FindObjectOfType<RotationCalculator>() != null)
-            {
-                FindObjectOfType<RotationCalculator>().trains[car] = this;
             }
 
         }
