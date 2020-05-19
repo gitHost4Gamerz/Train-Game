@@ -34,6 +34,16 @@ namespace PathCreation
                         break;  
 
                     }
+                    if (trainsOnTrack[i].distanceTravelled - 0.1 < 0 && trainsOnTrack[i].speed < 0)
+                    {
+                        Debug.Log("Pain");
+                        distanceOffset = previous.trackLength - trainsOnTrack[i].distanceTravelled;
+                        trainsOnTrack[i].pathCreator = previous;
+                        trainsOnTrack[i].distanceTravelled = distanceOffset;
+                        trainsOnTrack[i] = null;
+                        swapTracks = false;
+                        break;
+                    }
                 }
             }  
         }
