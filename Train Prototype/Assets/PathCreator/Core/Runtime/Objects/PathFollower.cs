@@ -13,7 +13,10 @@ namespace PathCreation
         public float fueledSpeed = 5f;
         public float minSpeed = -5f;
         public float maxSpeed = 7.5f;
-        public float speedChange = 5f;
+        public float speedChange;
+        public float speedChange1 = 0.01f;
+        public float speedChange2 = 0.02f;
+        public float speedChange3 = 0.03f;
         public int timeConsistent = 0;
         public RotationCalculator wholeTrain;
         public int car;
@@ -96,20 +99,20 @@ namespace PathCreation
             //Calculate speedChange (WIP dynamic acceleration, aka the "simulated quadratic")
             if (timeConsistent >= 0 && timeConsistent < 175) //Small change at first
             {
-                speedChange = 0.5f;
+                speedChange = speedChange1;
             }
             if (timeConsistent >= 250 && timeConsistent < 450) //Then a medium change after a time
             {
-                speedChange = 2f;
+                speedChange = speedChange2;
             }
             if (timeConsistent >= 450) //Finally a large change in acceleration, this also caps timeConsistent so no memory leak
             {
                 timeConsistent = 450;
-                speedChange = 3f;
+                speedChange = speedChange3;
             }
 
             // Consistent frames (this might not be quite right)
-            float amount = Mathf.Abs(speedChange * Time.deltaTime);
+            float amount = Mathf.Abs(speedChange);
 
             // If we are self-propelling, accelerate until we hit max speed and then cap
             if (fueled && speed < fueledSpeed && !Input.GetKey(KeyCode.LeftShift))
@@ -142,9 +145,8 @@ namespace PathCreation
                     }
                 }
             }
-
             // Add rotational acceleration
-            if (speed >= minSpeed && speed <= maxSpeed && !Input.GetKey(KeyCode.LeftShift) && (!fueled || speed > (fueledSpeed - 0.5)))
+            else if (speed >= minSpeed && speed <= maxSpeed && !Input.GetKey(KeyCode.LeftShift) && (!fueled || speed > (fueledSpeed - 0.5)))
             {
                 speed += wholeTrain.rotationalAcceleration;
             }

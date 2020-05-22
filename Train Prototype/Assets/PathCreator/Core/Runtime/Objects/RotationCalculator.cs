@@ -26,22 +26,21 @@ namespace PathCreation
 
                     cRot = trains[i].transform.localRotation.eulerAngles.x;
 
-                    // Time.deltaTime for framerate consitentcy
                     if (cRot >= 5 && cRot < 18)
                     {
-                        rotationalAcceleration += (hillChange * Time.deltaTime);
+                        rotationalAcceleration += (hillChange);
                     }
                     if (cRot >= 18 && cRot < 60)
                     {
-                        rotationalAcceleration += (bigHillChange * Time.deltaTime);
+                        rotationalAcceleration += (bigHillChange);
                     }
                     if (cRot >= 342 && cRot < 355)
                     {
-                        rotationalAcceleration -= (hillChange * Time.deltaTime);
+                        rotationalAcceleration -= (hillChange);
                     }
                     if (cRot >= 300 && cRot < 342)
                     {
-                        rotationalAcceleration -= (bigHillChange * Time.deltaTime);
+                        rotationalAcceleration -= (bigHillChange);
                     }
                 }
             }
