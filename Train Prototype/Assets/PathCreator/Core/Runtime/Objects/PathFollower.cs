@@ -17,7 +17,7 @@ namespace PathCreation
         public float speedChange1 = 0.01f;
         public float speedChange2 = 0.02f;
         public float speedChange3 = 0.03f;
-        public int timeConsistent = 0;
+        public float timeConsistent = 0;
         public RotationCalculator wholeTrain;
         public int car;
         public bool initialized = false;
@@ -93,21 +93,21 @@ namespace PathCreation
             // Calculate how long we've been fueled or unfueled
             if (fueled || wholeTrain.rotationalAcceleration <= 0)
             {
-                timeConsistent++;
+                timeConsistent += Time.deltaTime;
             }
 
             //Calculate speedChange (WIP dynamic acceleration, aka the "simulated quadratic")
-            if (timeConsistent >= 0 && timeConsistent < 175) //Small change at first
+            if (timeConsistent >= 0 && timeConsistent < 3) //Small change at first
             {
                 speedChange = speedChange1;
             }
-            if (timeConsistent >= 250 && timeConsistent < 450) //Then a medium change after a time
+            if (timeConsistent >= 3 && timeConsistent < 7) //Then a medium change after a time
             {
                 speedChange = speedChange2;
             }
-            if (timeConsistent >= 450) //Finally a large change in acceleration, this also caps timeConsistent so no memory leak
+            if (timeConsistent >= 7) //Finally a large change in acceleration, this also caps timeConsistent so no memory leak
             {
-                timeConsistent = 450;
+                timeConsistent = 7;
                 speedChange = speedChange3;
             }
 
@@ -117,7 +117,7 @@ namespace PathCreation
             // If we are self-propelling, accelerate until we hit max speed and then cap
             if (fueled && speed < fueledSpeed && !Input.GetKey(KeyCode.LeftShift))
             {
-                speed += amount;
+                speed += amount * Time.deltaTime;
                 if (speed > fueledSpeed)
                 {
                     speed = fueledSpeed;
@@ -126,10 +126,10 @@ namespace PathCreation
 
             // If we are not self-propelling, decelerate until we hit zero and then set to 0 (only if on a flat plane)
             if (!fueled && wholeTrain.rotationalAcceleration == 0 && !Input.GetKey(KeyCode.LeftShift))
-                {
+            {
                 if (speed > 0)
                 {
-                    speed -= amount;
+                    speed -= amount * Time.deltaTime;
                     if (speed < 0.01)
                     {
                         speed = 0;
@@ -138,7 +138,7 @@ namespace PathCreation
                 // Special case for sliding backwards when not self-propelled that makes us slow down
                 else
                 {
-                    speed += amount;
+                    speed += amount * Time.deltaTime;
                     if (speed > -0.01)
                     {
                         speed = 0;
@@ -162,7 +162,7 @@ namespace PathCreation
                 // If we are level, set back to fueledSpeed after a second
                 if (wholeTrain.rotationalAcceleration == 0)
                 {
-                    speed -= amount;
+                    speed -= amount * Time.deltaTime;
                     if (speed < fueledSpeed)
                     {
                         speed = fueledSpeed;
@@ -213,6 +213,7 @@ namespace PathCreation
             //follow path
             if (pathCreator != null && initialized)
             {
+
                 distanceTravelled += (speed * Time.deltaTime);
 
                 transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);

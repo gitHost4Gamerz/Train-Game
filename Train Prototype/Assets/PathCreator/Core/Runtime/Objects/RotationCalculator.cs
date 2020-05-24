@@ -28,19 +28,19 @@ namespace PathCreation
 
                     if (cRot >= 5 && cRot < 18)
                     {
-                        rotationalAcceleration += (hillChange);
+                        rotationalAcceleration += (hillChange * Time.deltaTime);
                     }
                     if (cRot >= 18 && cRot < 60)
                     {
-                        rotationalAcceleration += (bigHillChange);
+                        rotationalAcceleration += (bigHillChange * Time.deltaTime);
                     }
                     if (cRot >= 342 && cRot < 355)
                     {
-                        rotationalAcceleration -= (hillChange);
+                        rotationalAcceleration -= (hillChange * Time.deltaTime);
                     }
                     if (cRot >= 300 && cRot < 342)
                     {
-                        rotationalAcceleration -= (bigHillChange);
+                        rotationalAcceleration -= (bigHillChange * Time.deltaTime);
                     }
                 }
             }
