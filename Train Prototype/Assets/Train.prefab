@@ -113,15 +113,14 @@ MonoBehaviour:
   fueledSpeed: 5
   minSpeed: -5
   maxSpeed: 7.5
-  speedChange: 0.1
-  speedChange1: 0.1
-  speedChange2: 0.2
-  speedChange3: 0.3
+  speedChange: 0.2
+  speedChange1: 0.2
+  speedChange2: 0.3
+  speedChange3: 0.4
   timeConsistent: 0
   wholeTrain: {fileID: 0}
   car: 0
   initialized: 0
   distanceTravelled: 0
-  distanceTravelledDouble: 0
   fueled: 1
   currentTrackLength: 0

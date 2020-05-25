@@ -9,14 +9,14 @@ namespace PathCreation
         public PathCreator pathCreator;
         public PathCreator currentPath;
         public EndOfPathInstruction endOfPathInstruction;
-        public float speed = 5f;
-        public float fueledSpeed = 5f;
-        public float minSpeed = -5f;
-        public float maxSpeed = 7.5f;
+        public float speed = 1f;
+        public float fueledSpeed = 1f;
+        public float minSpeed = -1f;
+        public float maxSpeed = 1.5f;
         public float speedChange;
-        public float speedChange1 = 0.01f;
-        public float speedChange2 = 0.02f;
-        public float speedChange3 = 0.03f;
+        public float speedChange1 = 0.1f;
+        public float speedChange2 = 0.2f;
+        public float speedChange3 = 0.3f;
         public float timeConsistent = 0;
         public RotationCalculator wholeTrain;
         public int car;
@@ -112,12 +112,12 @@ namespace PathCreation
             }
 
             // Consistent frames (this might not be quite right)
-            float amount = Mathf.Abs(speedChange);
+            float amount = Mathf.Abs(speedChange * Time.deltaTime);
 
             // If we are self-propelling, accelerate until we hit max speed and then cap
             if (fueled && speed < fueledSpeed && !Input.GetKey(KeyCode.LeftShift))
             {
-                speed += amount * Time.deltaTime;
+                speed += amount;
                 if (speed > fueledSpeed)
                 {
                     speed = fueledSpeed;
@@ -129,7 +129,7 @@ namespace PathCreation
             {
                 if (speed > 0)
                 {
-                    speed -= amount * Time.deltaTime;
+                    speed -= amount;
                     if (speed < 0.01)
                     {
                         speed = 0;
@@ -138,7 +138,7 @@ namespace PathCreation
                 // Special case for sliding backwards when not self-propelled that makes us slow down
                 else
                 {
-                    speed += amount * Time.deltaTime;
+                    speed += amount;
                     if (speed > -0.01)
                     {
                         speed = 0;
@@ -146,7 +146,7 @@ namespace PathCreation
                 }
             }
             // Add rotational acceleration
-            else if (speed >= minSpeed && speed <= maxSpeed && !Input.GetKey(KeyCode.LeftShift) && (!fueled || speed > (fueledSpeed - 0.5)))
+            else if (speed >= minSpeed && speed <= maxSpeed && !Input.GetKey(KeyCode.LeftShift) && (!fueled || speed > (fueledSpeed - 0.1)))
             {
                 speed += wholeTrain.rotationalAcceleration;
             }
@@ -162,7 +162,7 @@ namespace PathCreation
                 // If we are level, set back to fueledSpeed after a second
                 if (wholeTrain.rotationalAcceleration == 0)
                 {
-                    speed -= amount * Time.deltaTime;
+                    speed -= amount;
                     if (speed < fueledSpeed)
                     {
                         speed = fueledSpeed;
