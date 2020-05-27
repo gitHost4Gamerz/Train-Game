@@ -21,6 +21,8 @@ namespace PathCreation
         public RotationCalculator wholeTrain;
         public int car;
         public bool initialized = false;
+        public bool swapTracks = false;
+        public float amount;
 
         public float distanceTravelled = 0;
 
@@ -112,7 +114,7 @@ namespace PathCreation
             }
 
             // Consistent frames (this might not be quite right)
-            float amount = Mathf.Abs(speedChange * Time.deltaTime);
+            amount = Mathf.Abs(speedChange * Time.deltaTime);
 
             // If we are self-propelling, accelerate until we hit max speed and then cap
             if (fueled && speed < fueledSpeed && !Input.GetKey(KeyCode.LeftShift))
