@@ -7,14 +7,43 @@ namespace PathCreation
     public class trackLink : MonoBehaviour
     {
         // This simply stores our two track endpoints.
+        public PathCreator optionA;
+        public PathCreator optionB;
+        bool trackChange = false;
         public PathCreator previous;
         public PathCreator next;
         public PathFollower[] trainsOnTrack = new PathFollower[20];
         public float distanceOffset = 0;
 
+        // Happens first - setup
+        void Start()
+        {
+            next = optionA;
+        }
+
         // Update is called once per frame
         void Update()
         {
+            // This code gives us the ability to swap between next tracks if we are not in the process of changing tracks and we have a track to change to
+            if (trainsOnTrack[0] != null)
+            // Consider adding "&& optionB != null." For now, we will have optionA and optionB be the same thing for tracks without branching paths.
+            {
+                //If we left click, we change where we're going.
+                if (Input.GetKeyDown(KeyCode.Mouse0))
+                {
+                    trackChange = !trackChange;
+                }
+
+                //By default trackChange is set to false and our initial next is always set to optionA. Clicking will swap that to optionB as long as the train is currently swapping. Currently this will work for all tracks.
+                if (trackChange)
+                {
+                    next = optionB;
+                }
+                else
+                {
+                    next = optionA;
+                }
+            }
 
             // First let's look through all the carts on the track
             for (int i = 0; i < trainsOnTrack.Length; i++)

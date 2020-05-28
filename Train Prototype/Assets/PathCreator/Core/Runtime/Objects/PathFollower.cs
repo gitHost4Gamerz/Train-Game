@@ -70,18 +70,19 @@ namespace PathCreation
                     Debug.Log("Swappin!");
                     swapTracks = false;
                     distanceOffset = distanceTravelled - pathCreator.trackLength;
+                    pathCreator.GetComponent<trackLink>().trainsOnTrack[car] = null;
                     pathCreator = pathCreator.GetComponent<trackLink>().next;
                     distanceTravelled = distanceOffset;
-                    pathCreator.GetComponent<trackLink>().trainsOnTrack[car] = null;
+
                 }
                 if (speed < 0)
                 {
                     Debug.Log("Swappin... backwards!");
                     swapTracks = false;
                     distanceOffset = pathCreator.GetComponent<trackLink>().previous.trackLength + distanceTravelled;
+                    pathCreator.GetComponent<trackLink>().trainsOnTrack[car] = null;
                     pathCreator = pathCreator.GetComponent<trackLink>().previous;
                     distanceTravelled = distanceOffset;
-                    pathCreator.GetComponent<trackLink>().trainsOnTrack[car] = null;
                 }
             }
 
