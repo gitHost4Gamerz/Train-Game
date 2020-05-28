@@ -23,6 +23,8 @@ namespace PathCreation
         public bool initialized = false;
         public bool swapTracks = false;
         public float amount;
+        public float moveCheck = 0;
+        public float distanceOffset = 0;
 
         public float distanceTravelled = 0;
 
@@ -60,10 +62,30 @@ namespace PathCreation
                 }
             }
 
-            // This exists for testing purposes. Not necessary.
-            //Debug.Log(distanceTravelled);
+            // This code swaps us to another track if specified in trackLink (scary, hope it works)!
+            if (swapTracks)
+            {
+                if (speed > 0)
+                {
+                    Debug.Log("Swappin!");
+                    swapTracks = false;
+                    distanceOffset = distanceTravelled - pathCreator.trackLength;
+                    pathCreator = pathCreator.GetComponent<trackLink>().next;
+                    distanceTravelled = distanceOffset;
+                    pathCreator.GetComponent<trackLink>().trainsOnTrack[car] = null;
+                }
+                if (speed < 0)
+                {
+                    Debug.Log("Swappin... backwards!");
+                    swapTracks = false;
+                    distanceOffset = pathCreator.GetComponent<trackLink>().previous.trackLength + distanceTravelled;
+                    pathCreator = pathCreator.GetComponent<trackLink>().previous;
+                    distanceTravelled = distanceOffset;
+                    pathCreator.GetComponent<trackLink>().trainsOnTrack[car] = null;
+                }
+            }
 
-            // This exists for editor testing purposes. Tee-hee!
+            // Not 100% sure why this code is here... great. Looks important, though.
             if (pathCreator != null)
             {
                 currentTrackLength = pathCreator.trackLength;
@@ -215,8 +237,8 @@ namespace PathCreation
             //follow path
             if (pathCreator != null && initialized)
             {
-
-                distanceTravelled += (speed * Time.deltaTime);
+                moveCheck = (speed * Time.deltaTime);
+                distanceTravelled += (moveCheck);
 
                 transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
                 transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);

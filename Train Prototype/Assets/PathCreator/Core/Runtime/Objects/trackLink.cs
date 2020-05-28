@@ -15,6 +15,7 @@ namespace PathCreation
         // Update is called once per frame
         void Update()
         {
+
             // First let's look through all the carts on the track
             for (int i = 0; i < trainsOnTrack.Length; i++)
             {
@@ -24,36 +25,14 @@ namespace PathCreation
                     if (trainsOnTrack[i].speed > 0)
                     {
                         // If this cart has travelled the distance of our track length, swap to the next track, set distance travelled to 0, and remove it from this fine array.
-                        if (trainsOnTrack[i].swapTracks)
-                        {
-                            Debug.Log("Swappin!");
-                            trainsOnTrack[i].swapTracks = false;
-                            distanceOffset = trainsOnTrack[i].distanceTravelled - trainsOnTrack[i].pathCreator.trackLength;
-                            trainsOnTrack[i].pathCreator = next;
-                            trainsOnTrack[i].distanceTravelled = distanceOffset;
-                            trainsOnTrack[i] = null;
-                            break;
-                        }
-                        if (trainsOnTrack[i].distanceTravelled + trainsOnTrack[i].amount >= trainsOnTrack[i].pathCreator.trackLength)
+                        if (trainsOnTrack[i].distanceTravelled + (trainsOnTrack[i].moveCheck) >= trainsOnTrack[i].pathCreator.trackLength)
                         {
                             trainsOnTrack[i].swapTracks = true;
-
                         }
                     }
-
                     if (trainsOnTrack[i].speed < 0)
-                    {
-                        if (trainsOnTrack[i].swapTracks)
-                        {
-                            Debug.Log("Pain");
-                            trainsOnTrack[i].swapTracks = false;
-                            distanceOffset = previous.trackLength + trainsOnTrack[i].distanceTravelled;
-                            trainsOnTrack[i].pathCreator = previous;
-                            trainsOnTrack[i].distanceTravelled = distanceOffset;
-                            trainsOnTrack[i] = null;
-                            break;
-                        }
-                        if (trainsOnTrack[i].distanceTravelled - trainsOnTrack[i].amount <= 0)
+                    { 
+                        if (trainsOnTrack[i].distanceTravelled + (trainsOnTrack[i].moveCheck) <= 0)
                         {
                             trainsOnTrack[i].swapTracks = true;
                         }
