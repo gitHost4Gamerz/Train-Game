@@ -5,10 +5,10 @@ namespace PathCreation
     public class RotationCalculator : MonoBehaviour
     {
         // Max amount of cars for now is 10
-        public PathFollower[] trains = new PathFollower[20];
+        public PathFollower[] trains = new PathFollower[10];
         public float rotationalAcceleration = 0;
-        public float hillChange = 0.1f;
-        public float bigHillChange = 0.2f;
+        public float hillChange = 0.3f;
+        public float bigHillChange = 0.5f;
         public float cRot = 0;
         public int numOfTrains = 0;
 
