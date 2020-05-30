@@ -242,7 +242,9 @@ namespace PathCreation
                 distanceTravelled += (moveCheck);
 
                 transform.position = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
+                transform.position += new Vector3(0f, 0.25f, 0f);
                 transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
+                transform.Rotate(0, 0, 90);
 
             }
 
