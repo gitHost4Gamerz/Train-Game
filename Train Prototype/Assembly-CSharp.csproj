@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\AttatchPlayer.cs" />
      <Compile Include="Assets\Scripts\MoveCamera.cs" />
      <Compile Include="Assets\Scripts\PlayerMovement.cs" />
+     <Compile Include="Assets\UpdateTrainUI.cs" />
  <Reference Include="UnityEngine">
  <HintPath>D:/Prorgrams/2019.3.12f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>

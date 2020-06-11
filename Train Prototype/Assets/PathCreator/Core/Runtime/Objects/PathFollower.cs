@@ -6,6 +6,8 @@ namespace PathCreation
     // Depending on the end of path instruction, will either loop, reverse, or stop at the end of the path.
     public class PathFollower : MonoBehaviour
     {
+        public TrainController controller;
+        public bool playerTrain;
         public PathCreator pathCreator;
         public PathCreator currentPath;
         public EndOfPathInstruction endOfPathInstruction;
@@ -33,6 +35,17 @@ namespace PathCreation
 
         void Start()
         {
+
+            // Find our train's controller
+            if (playerTrain)
+            {
+                controller = FindObjectOfType<TrainController>();
+                if (controller == null)
+                {
+                    Debug.Log("No controller!");
+                }
+            }
+
             // Set ourselves in our wholeTrain's trains array at the start - asap
             wholeTrain.trains[car] = this;
 
@@ -54,10 +67,7 @@ namespace PathCreation
                 // So this is how we do it. As soon as numOfTrains is filled, we put the carts where they need to go on the track. This causes a one frame delay, but I have no other ideas. 
                 if (wholeTrain.numOfTrains != 0)
                 {
-                    //Debug.Log("Number of trains: " + wholeTrain.numOfTrains);
-                    //Debug.Log("Car Number: " + car);
                     distanceTravelled = wholeTrain.numOfTrains - (car + 1);
-                    //Debug.Log("Distance travelled for car " + car + ": " + distanceTravelled);
                     initialized = true;
                 }
             }
@@ -101,18 +111,24 @@ namespace PathCreation
 
 
             // Check to see if train is fueled (propelling itself)
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (controller.speedState > 0)
             {
-                fueled = !fueled;
-                timeConsistent = 0;
-                if (!fueled)
-                {
-                    fueledSpeed = 0;
-                }
-                else
-                {
-                    fueledSpeed = 5f;
-                }
+                fueled = true;
+            } 
+            else
+            {
+                fueled = false;
+                fueledSpeed = 0;
+            }
+
+            if (controller.speedState == 1)
+            {
+                fueledSpeed = 3;
+            }
+
+            if (controller.speedState == 2)
+            {
+                fueledSpeed = 5;
             }
 
             // Calculate how long we've been fueled or unfueled
@@ -136,7 +152,7 @@ namespace PathCreation
                 speedChange = speedChange3;
             }
 
-            // Consistent frames (this might not be quite right)
+            // Consistent frames
             amount = Mathf.Abs(speedChange * Time.deltaTime);
 
             // If we are self-propelling, accelerate until we hit max speed and then cap
@@ -201,28 +217,8 @@ namespace PathCreation
                 speed = minSpeed;
             }
 
-            // Speed control
-            if (Input.GetKeyDown(KeyCode.DownArrow) && fueledSpeed > 0)
-            {
-                fueledSpeed--;
-                // If this brings us to a halt, we are no longer fueled
-                if (fueledSpeed == 0)
-                {
-                    fueled = false;
-                }
-            }
-            if (Input.GetKeyDown(KeyCode.UpArrow) && fueledSpeed < 5)
-            {
-                fueledSpeed++;
-                // If we are accelerate while stopped, we are now fueled
-                if (!fueled)
-                {
-                    fueled = true;
-                }
-            }
-
-            // Breaks system
-            if (Input.GetKey(KeyCode.LeftShift))
+            // Brakes system
+            if (controller.brakeState)
             {
                 if (speed != 0)
                 {

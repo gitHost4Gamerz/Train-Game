@@ -70,6 +70,7 @@
      <Compile Include="Assets\PathCreator\Core\Runtime\Objects\PathSpawner.cs" />
      <Compile Include="Assets\PathCreator\Core\Runtime\Objects\RoadMeshCreator.cs" />
      <Compile Include="Assets\PathCreator\Core\Runtime\Objects\RotationCalculator.cs" />
+     <Compile Include="Assets\PathCreator\Core\Runtime\Objects\TrainController.cs" />
      <Compile Include="Assets\PathCreator\Core\Runtime\Objects\VertexPath.cs" />
      <Compile Include="Assets\PathCreator\Core\Runtime\Objects\trackLink.cs" />
      <Compile Include="Assets\PathCreator\Core\Runtime\Utility\CubicBezierUtility.cs" />
