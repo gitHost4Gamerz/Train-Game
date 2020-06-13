@@ -2309,7 +2309,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   train: {fileID: 1368082183}
-  buttonIdentity: Low Speed
+  buttonIdentity: 1
   onSprite: {fileID: 21300000, guid: a5ded50996884894586c180eabd820cb, type: 3}
   offSprite: {fileID: 21300000, guid: 63330c93a4c8c4a488136137fd6baf6f, type: 3}
 --- !u!1001 &145125376
@@ -7338,7 +7338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   train: {fileID: 1368082183}
-  buttonIdentity: High Speed
+  buttonIdentity: 0
   onSprite: {fileID: 21300000, guid: 6708d4efe521ae1438fb9a4a7d93612e, type: 3}
   offSprite: {fileID: 21300000, guid: 5dbb5757f311a0242aa1df22ee5a333c, type: 3}
 --- !u!43 &400259470
@@ -10249,7 +10249,7 @@ GameObject:
   - component: {fileID: 554731413}
   - component: {fileID: 554731415}
   m_Layer: 5
-  m_Name: Breaks
+  m_Name: Brakes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10324,7 +10324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   train: {fileID: 1368082183}
-  buttonIdentity: Brakes
+  buttonIdentity: 3
   onSprite: {fileID: 21300000, guid: 4345752c8fd76d7448879642ae803dad, type: 3}
   offSprite: {fileID: 21300000, guid: cb3063751ffc7bc45a87d5a8df099644, type: 3}
 --- !u!4 &557888169 stripped
@@ -11318,7 +11318,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   train: {fileID: 1368082183}
-  buttonIdentity: No Speed
+  buttonIdentity: 2
   onSprite: {fileID: 21300000, guid: ca7fc0fad38d475489f79c8b4bada48d, type: 3}
   offSprite: {fileID: 21300000, guid: 5e42215f3d9f3584bb84e2ef2e228128, type: 3}
 --- !u!1001 &610019759
@@ -11934,7 +11934,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   train: {fileID: 1368082183}
-  buttonIdentity: Left Turn
+  buttonIdentity: 4
   onSprite: {fileID: 21300000, guid: b5545c631f188824fa51db46c8f961f1, type: 3}
   offSprite: {fileID: 21300000, guid: ae32cfb506f89ae4f8a49e4126850ed7, type: 3}
 --- !u!4 &643542825 stripped
@@ -37577,7 +37577,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   train: {fileID: 1368082183}
-  buttonIdentity: Right Turn
+  buttonIdentity: 5
   onSprite: {fileID: 21300000, guid: b5545c631f188824fa51db46c8f961f1, type: 3}
   offSprite: {fileID: 21300000, guid: ae32cfb506f89ae4f8a49e4126850ed7, type: 3}
 --- !u!1001 &2041421276

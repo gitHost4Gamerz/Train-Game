@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class UpdateTrainUI : MonoBehaviour {
 
     public TrainController train;
-    public string buttonIdentity;
+    public ButtonIdentity buttonIdentity;
     private Image m_Image;
     //Set in editor
     public Sprite onSprite;
@@ -24,10 +24,10 @@ public class UpdateTrainUI : MonoBehaviour {
 
         switch (buttonIdentity)
         {
-            case "High Speed":
+            case ButtonIdentity.HighSpeed:
                 if (train.speedState == 2)
                 {
-                    m_Image.sprite = onSprite;               
+                    m_Image.sprite = onSprite;
                 }
                 else
                 {
@@ -35,7 +35,7 @@ public class UpdateTrainUI : MonoBehaviour {
                 }
                 break;
 
-            case "Low Speed":
+            case ButtonIdentity.LowSpeed:
                 if (train.speedState == 1)
                 {
                     m_Image.sprite = onSprite;
@@ -46,7 +46,7 @@ public class UpdateTrainUI : MonoBehaviour {
                 }
                 break;
 
-            case "No Speed":
+            case ButtonIdentity.NoSpeed:
                 if (train.speedState == 0)
                 {
                     m_Image.sprite = onSprite;
@@ -57,7 +57,7 @@ public class UpdateTrainUI : MonoBehaviour {
                 }
                 break;
 
-            case "Brakes":
+            case ButtonIdentity.Brakes:
                 if (train.brakeState)
                 {
                     m_Image.sprite = onSprite;
@@ -68,7 +68,7 @@ public class UpdateTrainUI : MonoBehaviour {
                 }
                 break;
 
-            case "Left Turn":
+            case ButtonIdentity.LeftTurn:
                 if (train.turnState)
                 {
                     m_Image.sprite = onSprite;
@@ -79,7 +79,7 @@ public class UpdateTrainUI : MonoBehaviour {
                 }
                 break;
 
-            case "Right Turn":
+            case ButtonIdentity.RightTurn:
                 if (!train.turnState)
                 {
                     m_Image.sprite = onSprite;
