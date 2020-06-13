@@ -17,7 +17,7 @@ public class AttatchPlayer : MonoBehaviour
     {
         if (other.gameObject == player)
         {
-            other.transform.parent = null;
+            //other.transform.parent = null;
         }
     }
 }
