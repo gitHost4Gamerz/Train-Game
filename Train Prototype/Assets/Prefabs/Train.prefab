@@ -108,6 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33aabe1a2dec93349b06e6e5dc51bc06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 0}
+  playerTrain: 0
   pathCreator: {fileID: 0}
   currentPath: {fileID: 0}
   endOfPathInstruction: 3

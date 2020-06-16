@@ -294,4 +294,13 @@ public class PlayerMovement : MonoBehaviour
         grounded = false;
     }
 
+    //Keep the player on the train
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Bounds")
+        {
+            //rb.velocity = new Vector3(0f, 0f, 0f);
+            Debug.Log("Touching Walls");
+        }
+    }
 }
